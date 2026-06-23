@@ -28,13 +28,13 @@ The current backend uses:
 Working now:
 
 - local task API in `backend/LocalApi`
+- Azure Functions host scaffolded in `backend/AzureFunctions`
 - shared backend projects in `backend/Core` and `backend/Infrastructure`
 - local HTML tester in `html-testers/local`
 - repo-root launcher script for starting the API on macOS
 
 Planned later:
 
-- Azure Functions host
 - hosted HTML tester for Azure
 - React Native mobile app
 
@@ -141,6 +141,7 @@ dotnet ef database update \
 
 ```text
 backend/
+  AzureFunctions/   Azure Functions isolated worker host
   Core/             Shared models, DTOs, and service contracts
   Infrastructure/   EF Core data access and service implementations
   LocalApi/         Local ASP.NET Core API host
@@ -169,7 +170,8 @@ This project is meant to demonstrate a disciplined integration path:
 
 1. build and verify the backend locally
 2. test it with a minimal browser client
-3. later deploy the same backend logic to Azure
-4. later connect a React Native client to the hosted backend
+3. scaffold the Azure Functions host over the same shared logic
+4. later deploy that host to Azure
+5. later connect a React Native client to the hosted backend
 
 It is intentionally small. The goal is to prove the workflow cleanly, not to ship a large product.
