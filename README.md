@@ -1,8 +1,8 @@
 # RN_NET_TEST
 
-`RN_NET_TEST` is a small full-stack demo project that proves a backend-first workflow for a future React Native app.
+`RN_NET_TEST` is a small full-stack demo project that proves a backend-first workflow across local .NET development, Azure hosting, and a React Native client.
 
-Today, the working part of the project is a local .NET task API backed by SQLite, plus a lightweight HTML page you can use to test the API without Postman, Swagger, or a mobile client.
+The repo includes a local .NET task API backed by SQLite, an Azure-hosted Functions version backed by Azure SQL, lightweight HTML testers, and an Expo mobile client.
 
 ## What It Does
 
@@ -21,6 +21,7 @@ The current backend uses:
 - ASP.NET Core Web API
 - Entity Framework Core
 - SQLite
+- Azure SQL Database
 - Expo / React Native
 - plain HTML + JavaScript for manual testing
 
@@ -30,6 +31,7 @@ Working now:
 
 - local task API in `backend/LocalApi`
 - Azure Functions host scaffolded in `backend/AzureFunctions`
+- deployed Azure Functions endpoint at `https://rnnettestfuncc30c423c3.azurewebsites.net`
 - shared backend projects in `backend/Core` and `backend/Infrastructure`
 - local HTML tester in `html-testers/local`
 - hosted HTML tester in `html-testers/azure`
@@ -176,6 +178,10 @@ dotnet ef database update \
   --context Infrastructure.Data.AppDbContext
 ```
 
+Azure deployment note:
+
+- the Azure Functions host applies EF Core migrations on startup for the configured database provider
+
 ## Project Layout
 
 ```text
@@ -211,7 +217,7 @@ This project is meant to demonstrate a disciplined integration path:
 1. build and verify the backend locally
 2. test it with a minimal browser client
 3. scaffold the Azure Functions host over the same shared logic
-4. later deploy that host to Azure
-5. later connect a React Native client to the hosted backend
+4. deploy that host to Azure
+5. connect a React Native client to the hosted backend
 
 It is intentionally small. The goal is to prove the workflow cleanly, not to ship a large product.

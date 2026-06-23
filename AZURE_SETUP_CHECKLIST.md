@@ -2,7 +2,7 @@
 
 This checklist captures the local tooling and Azure account state required before building the Azure Functions host and deploying this project.
 
-Status in this repo as of June 22, 2026:
+Status in this repo as of June 23, 2026:
 
 - Azure CLI is installed
 - Azure Functions Core Tools is installed
@@ -10,6 +10,8 @@ Status in this repo as of June 22, 2026:
 - Azure login is active
 - expected subscription is selected
 - expected resource group exists
+- Azure SQL server and database were created successfully during deployment
+- Function App deployment succeeded
 
 ## Commands To Verify
 
@@ -117,17 +119,14 @@ Host:
 - `func --version` returns a valid 4.x version
 - `dotnet --info` shows the .NET 10 SDK installed
 
-## Azure SQL Check
+## Azure SQL Note
 
-The plan calls for confirming Azure SQL free-offer eligibility for the target subscription. That has not been verified in this document.
+The deployment used an Azure SQL server in `westus` after `eastus` and `eastus2` both rejected new SQL server provisioning.
 
-Before creating the cloud database, confirm:
+The deployed database was created successfully with a low-cost serverless General Purpose configuration and the free-limit flag enabled.
 
-- pricing and SKU constraints for the intended Azure SQL option
-- whether the `biffnaArnoldGmailPAYG` subscription is eligible for the desired free or low-cost configuration
+This checklist does not make pricing guarantees. Azure pricing and eligibility can change independently of the repo.
 
-## Next Planned Step
+## Follow-Up
 
-After this checklist is satisfied, the next implementation step is:
-
-- create `backend/AzureFunctions` as a thin Azure Functions host over the shared backend logic
+Deployment is complete. The Azure Functions host now applies EF Core migrations on startup for the configured database provider.

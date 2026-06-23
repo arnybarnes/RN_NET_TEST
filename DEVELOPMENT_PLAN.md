@@ -11,6 +11,25 @@ Build a small but credible demo that proves you can:
 
 The goal is not to build a large product. The goal is to show a disciplined integration workflow from local service development to hosted mobile consumption.
 
+## Current Status
+
+This plan is now substantially complete at demo level.
+
+Completed:
+
+- shared backend logic
+- local ASP.NET Core API host
+- local HTML tester
+- Azure CLI verification checklist
+- Azure Functions host
+- Azure deployment
+- hosted HTML tester
+- React Native mobile client pointed at the hosted backend
+
+Remaining technical cleanup:
+
+- continue mobile polish and packaging if the demo needs to look more productized
+
 ## Core Delivery Sequence
 
 Build in this order:
@@ -46,7 +65,6 @@ Both hosts should call the same application services so behavior stays consisten
 - ORM: Entity Framework Core
 - Local database: SQLite
 - Cloud database: Azure SQL Database
-- API docs/testing: Swagger for the local API host
 - Deployment tool: Azure CLI
 - Mobile frontend: React Native
 - Simple manual verification UI: plain HTML + JavaScript
@@ -66,6 +84,10 @@ Use Entity Framework Core from the beginning.
 - use `Microsoft.EntityFrameworkCore.SqlServer`
 - connect the Azure Functions host to Azure SQL Database
 - reuse the same entities, `DbContext`, and service layer
+
+Current repo note:
+
+- the Azure Functions host now applies EF Core migrations at startup for the configured database provider
 
 The application data model should stay the same across environments. Only the EF Core provider and connection string should change.
 
@@ -169,7 +191,6 @@ Create the local ASP.NET Core API host used for fast iteration.
 - add controllers that call shared services
 - add dependency injection
 - configure EF Core with SQLite
-- add Swagger
 - add logging
 - add CORS
 - add `/health`
@@ -177,7 +198,7 @@ Create the local ASP.NET Core API host used for fast iteration.
 ### Outcome
 
 - API runs locally with `dotnet run`
-- endpoints can be exercised in Swagger and the browser-based tester
+- endpoints can be exercised in the browser-based tester and direct HTTP calls
 
 ## Phase 3: Local HTML Tester
 
@@ -216,7 +237,6 @@ Run and verify:
 - the expected subscription is selected
 - Azure Functions Core Tools is installed
 - local .NET SDK matches the target framework
-- Azure SQL free-offer eligibility is confirmed for the target subscription
 
 ### Deliverable
 
@@ -258,6 +278,11 @@ Deploy with Azure CLI, not the IDE publish flow.
 ### Outcome
 
 - a working public backend endpoint exists for the hosted tester and mobile app
+
+Current repo note:
+
+- the public backend is live
+- the Azure Functions host now applies EF Core migrations on startup
 
 ## Phase 7: Hosted HTML Tester
 
@@ -341,7 +366,7 @@ Requirements:
 - Entity Framework Core with migrations
 - SQLite for local development
 - Azure SQL Database for Azure deployment
-- Local ASP.NET Core Web API host with Swagger, logging, CORS, and /health
+- Local ASP.NET Core Web API host with logging, CORS, and /health
 - Azure Functions isolated worker host that reuses the same backend logic
 - Endpoints for list/get/create/update/delete tasks
 - Plain HTML tester for the local API
