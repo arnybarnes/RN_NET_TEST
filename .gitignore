@@ -1,0 +1,35 @@
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Build output
+bin/
+obj/
+out/
+dist/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+secrets/
+
+# .NET local configuration
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+local.settings.json
+!.gitkeep
+
+# User secrets and local databases
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Logs and test artifacts
+*.log
+coverage/
+TestResults/
