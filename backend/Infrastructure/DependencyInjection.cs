@@ -2,6 +2,7 @@ using Core.Services;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,7 +25,14 @@ public static class DependencyInjection
                     options.UseSqlite(connectionString);
                     break;
                 case "sqlserver":
-                    options.UseSqlServer(connectionString);
+                    options.UseSqlServer(connectionString, sqlServerOptions =>
+                    {
+                        sqlServerOptions.EnableRetryOnFailure();
+                    });
+                    options.ConfigureWarnings(warnings =>
+                    {
+                        warnings.Ignore(RelationalEventId.PendingModelChangesWarning);
+                    });
                     break;
                 default:
                     throw new InvalidOperationException($"Unsupported database provider '{provider}'.");
