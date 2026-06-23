@@ -21,6 +21,7 @@ The current backend uses:
 - ASP.NET Core Web API
 - Entity Framework Core
 - SQLite
+- Expo / React Native
 - plain HTML + JavaScript for manual testing
 
 ## Current Project Status
@@ -32,11 +33,12 @@ Working now:
 - shared backend projects in `backend/Core` and `backend/Infrastructure`
 - local HTML tester in `html-testers/local`
 - hosted HTML tester in `html-testers/azure`
+- Expo React Native client in `mobile`
 - repo-root launcher script for starting the API on macOS
 
 Planned later:
 
-- React Native mobile app
+- deeper mobile polish and packaging
 
 ## Quick Start
 
@@ -105,6 +107,43 @@ The tester supports:
 - delete task
 - visible error reporting
 
+## Try the Hosted Azure API
+
+Open this file in your browser:
+
+- [html-testers/azure/index.html](/Users/arnoldbiffna/Documents/dev/RN_NET_TEST/html-testers/azure/index.html)
+
+It defaults to the deployed Azure Functions base URL:
+
+```text
+https://rnnettestfuncc30c423c3.azurewebsites.net
+```
+
+## Try the Mobile App
+
+From the repo root:
+
+```bash
+cd mobile
+npm install
+npm start
+```
+
+Then use Expo to open the app on:
+
+- iOS simulator
+- Android emulator
+- Expo Go on a device
+
+The mobile app currently:
+
+- points at the hosted Azure API by default
+- loads tasks
+- creates tasks
+- updates tasks
+- deletes tasks
+- lets you override the base URL at runtime
+
 ## API Routes
 
 The local API currently exposes:
@@ -148,7 +187,7 @@ backend/
 html-testers/
   azure/            Browser-based tester for the deployed Azure endpoint
   local/            Browser-based local API tester
-mobile/             Placeholder for the future React Native app
+mobile/             Expo React Native client for the hosted task API
 ```
 
 ## Troubleshooting
