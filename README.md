@@ -31,11 +31,11 @@ Working now:
 - Azure Functions host scaffolded in `backend/AzureFunctions`
 - shared backend projects in `backend/Core` and `backend/Infrastructure`
 - local HTML tester in `html-testers/local`
+- hosted HTML tester in `html-testers/azure`
 - repo-root launcher script for starting the API on macOS
 
 Planned later:
 
-- hosted HTML tester for Azure
 - React Native mobile app
 
 ## Quick Start
@@ -146,6 +146,7 @@ backend/
   Infrastructure/   EF Core data access and service implementations
   LocalApi/         Local ASP.NET Core API host
 html-testers/
+  azure/            Browser-based tester for the deployed Azure endpoint
   local/            Browser-based local API tester
 mobile/             Placeholder for the future React Native app
 ```
