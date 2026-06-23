@@ -2,7 +2,6 @@ using Core.Services;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,10 +27,6 @@ public static class DependencyInjection
                     options.UseSqlServer(connectionString, sqlServerOptions =>
                     {
                         sqlServerOptions.EnableRetryOnFailure();
-                    });
-                    options.ConfigureWarnings(warnings =>
-                    {
-                        warnings.Ignore(RelationalEventId.PendingModelChangesWarning);
                     });
                     break;
                 default:
