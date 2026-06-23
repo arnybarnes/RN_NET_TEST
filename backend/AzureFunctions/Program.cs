@@ -31,6 +31,11 @@ using (var scope = host.Services.CreateScope())
         Console.Error.WriteLine($"Skipping startup migration because Azure SQL is currently unavailable ({sqlException.Number}).");
         Console.Error.WriteLine(sqlException.Message);
     }
+    catch (SqlException ex) when (ex.Number == 2714)
+    {
+        Console.Error.WriteLine("Skipping startup migration because the target schema objects already exist in Azure SQL.");
+        Console.Error.WriteLine(ex.Message);
+    }
 }
 
 await host.RunAsync();
