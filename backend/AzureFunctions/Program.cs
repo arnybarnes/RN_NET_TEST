@@ -1,4 +1,5 @@
 using Infrastructure.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,7 +16,21 @@ var host = new HostBuilder()
 using (var scope = host.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await dbContext.Database.MigrateAsync();
+
+    try
+    {
+        await dbContext.Database.MigrateAsync();
+    }
+    catch (InvalidOperationException ex) when (ex.Message.Contains("PendingModelChangesWarning", StringComparison.Ordinal))
+    {
+        Console.Error.WriteLine("Skipping startup migration because the current SQL Server model differs from the shared migration snapshot.");
+        Console.Error.WriteLine(ex.Message);
+    }
+    catch (InvalidOperationException ex) when (ex.InnerException is SqlException sqlException)
+    {
+        Console.Error.WriteLine($"Skipping startup migration because Azure SQL is currently unavailable ({sqlException.Number}).");
+        Console.Error.WriteLine(sqlException.Message);
+    }
 }
 
 await host.RunAsync();
