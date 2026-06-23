@@ -1,6 +1,19 @@
 @LocalApi_HostAddress = http://localhost:5024
 
-GET {{LocalApi_HostAddress}}/weatherforecast/
+GET {{LocalApi_HostAddress}}/health
 Accept: application/json
 
 ###
+
+GET {{LocalApi_HostAddress}}/api/tasks
+Accept: application/json
+
+###
+
+POST {{LocalApi_HostAddress}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "First task",
+  "description": "Verify the local API host"
+}
