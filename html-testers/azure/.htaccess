@@ -1,0 +1,9 @@
+# Always revalidate HTML so new deploys show up immediately
+<FilesMatch "\.html$">
+  Header set Cache-Control "no-cache, must-revalidate"
+</FilesMatch>
+
+# Static assets may be cached long-term; bust them via a ?v= query string
+<FilesMatch "\.(js|css|png|jpe?g|gif|svg|webp|ico)$">
+  Header set Cache-Control "public, max-age=604800"
+</FilesMatch>
