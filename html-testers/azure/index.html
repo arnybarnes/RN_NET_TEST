@@ -202,9 +202,34 @@
             color: var(--ok);
         }
 
-        .tasks {
-            display: grid;
-            gap: 16px;
+        .carousel-viewport {
+            overflow: hidden;
+            border-radius: 16px;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: stretch;
+            transition: transform 0.35s ease;
+        }
+
+        .carousel-track > .task-card,
+        .carousel-track > .empty-state {
+            flex: 0 0 100%;
+            width: 100%;
+        }
+
+        .carousel-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .carousel-controls button:disabled {
+            opacity: 0.45;
+            cursor: default;
         }
 
         .task-card {
@@ -246,6 +271,162 @@
             font-family: "SFMono-Regular", Consolas, monospace;
             font-size: 0.85rem;
             line-height: 1.45;
+        }
+
+        .log-panel {
+            margin-top: 24px;
+        }
+
+        .log-header {
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--panel-alt);
+            color: var(--text);
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+
+        .log-grid {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 620px) {
+            .log-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .log-stream {
+            height: 100%;
+            min-height: 120px;
+            max-height: 360px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 14px;
+            background: #162028;
+            color: #ebf8fc;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.8rem;
+            line-height: 1.45;
+        }
+
+        .log-empty {
+            color: #7f95a1;
+        }
+
+        .log-entry {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(235, 248, 252, 0.12);
+        }
+
+        .log-entry:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .log-entry-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .log-entry-url {
+            color: #cfe6ee;
+            overflow-wrap: anywhere;
+        }
+
+        .log-entry-body {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+            overflow: visible;
+            color: #ebf8fc;
+            font-family: inherit;
+            font-size: inherit;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .log-col-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .log-col-head button {
+            padding: 4px 12px;
+            font-size: 0.8rem;
+        }
+
+        .log-col-title {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .method-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #f7fdff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .method-badge[data-method="GET"] {
+            background: #1f7a45;
+        }
+
+        .method-badge[data-method="POST"] {
+            background: #0f6c78;
+        }
+
+        .method-badge[data-method="PUT"] {
+            background: #8a6d1f;
+        }
+
+        .method-badge[data-method="DELETE"] {
+            background: #9c2e1b;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: #1f7a45;
+            color: #f7fdff;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .status-badge[data-ok="false"] {
+            background: #9c2e1b;
+        }
+
+        .log-time {
+            color: #9db4bf;
+            font-size: 0.75rem;
+            white-space: nowrap;
         }
 
         .mobile-app {
@@ -364,13 +545,41 @@
                         </div>
                         <button id="refreshTasksButton" type="button" class="secondary">Refresh</button>
                     </div>
-                    <div id="tasksContainer" class="tasks"></div>
+                    <div class="carousel">
+                        <div id="tasksViewport" class="carousel-viewport">
+                            <div id="tasksContainer" class="carousel-track"></div>
+                        </div>
+                        <div class="carousel-controls">
+                            <button id="prevTaskButton" type="button" class="secondary">&larr; Previous</button>
+                            <span id="carouselIndicator" class="pill">0 / 0</span>
+                            <button id="nextTaskButton" type="button" class="secondary">Next &rarr;</button>
+                        </div>
+                    </div>
                 </section>
+            </div>
+        </section>
 
-                <section class="panel">
-                    <h2>Request / Response Log</h2>
-                    <pre id="requestLog">No requests yet.</pre>
-                </section>
+        <section class="panel log-panel">
+            <h2>Request / Response Log</h2>
+            <div id="logHeader" class="log-header">No requests yet.</div>
+            <div class="log-grid">
+                <div class="log-col">
+                    <div class="log-col-head">
+                        <span class="log-col-title">Requests</span>
+                        <button id="clearLogButton" type="button" class="secondary">Clear</button>
+                    </div>
+                    <div id="requestLog" class="log-stream">
+                        <span class="log-empty">No requests yet.</span>
+                    </div>
+                </div>
+                <div class="log-col">
+                    <div class="log-col-head">
+                        <span class="log-col-title">Responses</span>
+                    </div>
+                    <div id="responseLog" class="log-stream">
+                        <span class="log-empty">No responses yet.</span>
+                    </div>
+                </div>
             </div>
         </section>
 
