@@ -121,7 +121,36 @@ It defaults to the deployed Azure Functions base URL:
 https://rnnettestfuncc30c423c3.azurewebsites.net
 ```
 
-## Try the Mobile App
+## Mobile App
+
+The mobile client is an Expo / React Native app called **RN Task Console**. It talks directly to the deployed Azure Functions endpoint and exercises the full CRUD surface of the `Tasks` API from a phone.
+
+### Screens
+
+| Startup | Task list |
+| --- | --- |
+| ![Startup screen showing the connection panel and empty create form](mobile_screen_caps/01startup.png) | ![Task list showing an existing task with status and timestamps](mobile_screen_caps/02tasks.png) |
+
+The **Connection** panel shows the active base URL (defaulting to the hosted Azure endpoint) and a `Refresh tasks` button that reloads the list. Each task in the **Tasks** list shows its title, ID, editable title/description fields, a status selector (`Pending` / `InProgress` / `Completed`), `Save` and `Delete` actions, and created/updated timestamps.
+
+| Create a task | Result after creating |
+| --- | --- |
+| ![Create Task form filled in with a title and description](mobile_screen_caps/03create.png) | ![Task list updated to show the newly created task](mobile_screen_caps/04result.png) |
+
+Filling in the **Create Task** form and tapping `Create task` posts to the API and the new task appears at the top of the list, with the task count updating from 1 to 2.
+
+### What it does
+
+The mobile app currently:
+
+- points at the hosted Azure API by default
+- loads tasks
+- creates tasks
+- updates task title, description, and status inline
+- deletes tasks
+- lets you override the base URL at runtime
+
+### Run it
 
 From the repo root:
 
@@ -136,15 +165,6 @@ Then use Expo to open the app on:
 - iOS simulator
 - Android emulator
 - Expo Go on a device
-
-The mobile app currently:
-
-- points at the hosted Azure API by default
-- loads tasks
-- creates tasks
-- updates tasks
-- deletes tasks
-- lets you override the base URL at runtime
 
 ## API Routes
 
