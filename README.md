@@ -133,32 +133,32 @@ https://rnnettestfuncc30c423c3.azurewebsites.net
 
 ## Mobile App
 
-The mobile client is an Expo / React Native app called **RN Task Console**. It talks directly to the deployed Azure Functions endpoint and exercises the full CRUD surface of the `Tasks` API from a phone.
+The mobile client is an Expo / React Native app called **RN Task Console**. It talks directly to the deployed Azure Functions endpoint and exercises the full CRUD surface of the `Tasks` API from a phone. The UI is organized into three tabs — **Connect**, **Create**, and **List** — selected from a bottom tab bar.
 
-### Screens
+### Tabs
 
-| Startup | Task list |
-| --- | --- |
-| ![Startup screen showing the connection panel and empty create form](mobile_screen_caps/01startup.png) | ![Task list showing an existing task with status and timestamps](mobile_screen_caps/02tasks.png) |
+| Connect | Create | List |
+| --- | --- | --- |
+| ![Connect tab showing the API base URL, Health check and Count tasks buttons, and a Health: Healthy result](mobile_screen_caps/01-connect.png) | ![Create tab showing the task title and description fields with a Create task button](mobile_screen_caps/02-create.png) | ![List tab showing task cards with editable fields, status selector, and Save/Delete actions](mobile_screen_caps/03-list.png) |
 
-The **Connection** panel shows the active base URL (defaulting to the hosted Azure endpoint) and a `Refresh tasks` button that reloads the list. Each task in the **Tasks** list shows its title, ID, editable title/description fields, a status selector (`Pending` / `InProgress` / `Completed`), `Save` and `Delete` actions, and created/updated timestamps.
+**Connect** holds the API base URL (defaulting to the hosted Azure endpoint), a `Health check` button that pings `/health`, and a `Count tasks` button that reports how many tasks are stored. The result of the last action is shown below the buttons (for example, `Health: Healthy`).
 
-| Create a task | Result after creating |
-| --- | --- |
-| ![Create Task form filled in with a title and description](mobile_screen_caps/03create.png) | ![Task list updated to show the newly created task](mobile_screen_caps/04result.png) |
+**Create** is a focused form with `Task title` and `Task description` fields and a `Create task` button. Submitting posts to the API and automatically switches to the List tab so you can see the new task.
 
-Filling in the **Create Task** form and tapping `Create task` posts to the API and the new task appears at the top of the list, with the task count updating from 1 to 2.
+**List** shows every task as a card with its title, ID, editable title/description fields, a status selector (`Pending` / `InProgress` / `Completed`), `Save` and `Delete` actions, and created/updated timestamps. A `Refresh tasks` button and a live task count sit at the top.
 
 ### What it does
 
 The mobile app currently:
 
 - points at the hosted Azure API by default
-- loads tasks
+- lets you override the base URL at runtime
+- runs a health check against the API
+- reports how many tasks are stored
 - creates tasks
+- lists tasks
 - updates task title, description, and status inline
 - deletes tasks
-- lets you override the base URL at runtime
 
 ### Run it
 
