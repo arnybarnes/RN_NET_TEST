@@ -80,6 +80,17 @@
             letter-spacing: 0.12em;
         }
 
+        .repo-link {
+            color: var(--accent);
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+        }
+
+        .repo-link:hover {
+            border-bottom-color: var(--accent);
+        }
+
         .grid {
             display: grid;
             gap: 20px;
@@ -244,6 +255,7 @@
             <p class="eyebrow">Hosted endpoint</p>
             <h1>Azure Task Tester</h1>
             <p>This page targets the deployed Azure Functions endpoint by default. Use it to validate the hosted task API without changing tools or local emulator state.</p>
+            <p><a class="repo-link" href="https://github.com/arnybarnes/RN_NET_TEST" target="_blank" rel="noopener">View the project on GitHub &rarr;</a></p>
         </section>
 
         <section class="grid">

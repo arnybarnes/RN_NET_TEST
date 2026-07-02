@@ -4,6 +4,12 @@
 
 The repo includes a local .NET task API backed by SQLite, an Azure-hosted Functions version backed by Azure SQL, lightweight HTML testers, and an Expo mobile client.
 
+## Links
+
+- **GitHub repo:** https://github.com/arnybarnes/RN_NET_TEST
+- **Hosted HTML tester:** https://arnoldbiffna.com/reactNativeASPnetSample/
+- **Azure Functions API:** https://rnnettestfuncc30c423c3.azurewebsites.net
+
 ## What It Does
 
 The demo exposes a simple `Tasks` API with these operations:
@@ -111,11 +117,15 @@ The tester supports:
 
 ## Try the Hosted Azure API
 
-Open this file in your browser:
+The Azure tester is deployed live at:
+
+- https://arnoldbiffna.com/reactNativeASPnetSample/
+
+You can also run it locally by opening this file in your browser:
 
 - [html-testers/azure/index.html](/Users/arnoldbiffna/Documents/dev/RN_NET_TEST/html-testers/azure/index.html)
 
-It defaults to the deployed Azure Functions base URL:
+Either way, it defaults to the deployed Azure Functions base URL:
 
 ```text
 https://rnnettestfuncc30c423c3.azurewebsites.net
