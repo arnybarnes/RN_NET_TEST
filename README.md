@@ -199,7 +199,9 @@ The local API uses SQLite with this connection string in [backend/LocalApi/appse
 
 That means the database file is created in the `backend/LocalApi` directory when the API runs there.
 
-If you need to apply migrations manually, run this from the repo root:
+The database is **not** committed to the repo (`*.db` is gitignored), so a fresh clone starts without one. On startup the local API applies EF Core migrations automatically (`Database.MigrateAsync()` in [backend/LocalApi/Program.cs](/Users/arnoldbiffna/Documents/dev/RN_NET_TEST/backend/LocalApi/Program.cs)), so the first run creates `tasks.db` with the schema and no data. No manual setup step is required.
+
+If you ever want to apply migrations manually anyway, run this from the repo root:
 
 ```bash
 dotnet ef database update \
@@ -210,7 +212,7 @@ dotnet ef database update \
 
 Azure deployment note:
 
-- the Azure Functions host applies EF Core migrations on startup for the configured database provider
+- the Azure Functions host also applies EF Core migrations on startup for the configured database provider
 
 ## Project Layout
 
@@ -232,7 +234,7 @@ If the API does not start:
 
 - make sure `dotnet` is installed and available on your `PATH`
 - confirm port `5024` is not already in use
-- run the migration command above if the database schema is missing
+- the schema is created automatically on startup; if it somehow gets out of sync, run the migration command above
 
 If the tester cannot connect:
 

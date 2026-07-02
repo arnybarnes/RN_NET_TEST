@@ -7,17 +7,17 @@
     <style>
         :root {
             color-scheme: light;
-            --bg: #f3efe6;
-            --panel: #fffdf8;
-            --panel-alt: #f9f3e7;
-            --text: #1f1f1c;
-            --muted: #6a655c;
-            --border: #d7cdbd;
-            --accent: #8f3b2e;
-            --accent-strong: #6f281e;
-            --ok: #1d6b43;
-            --error: #912018;
-            --shadow: 0 18px 40px rgba(58, 43, 23, 0.08);
+            --bg: #eef4f7;
+            --panel: #ffffff;
+            --panel-alt: #f5fafc;
+            --text: #18222a;
+            --muted: #5d6b75;
+            --border: #c9d9e2;
+            --accent: #0f6c78;
+            --accent-strong: #0a5660;
+            --ok: #1f7a45;
+            --error: #9c2e1b;
+            --shadow: 0 18px 40px rgba(15, 42, 56, 0.08);
         }
 
         * {
@@ -29,8 +29,8 @@
             font-family: Georgia, "Times New Roman", serif;
             color: var(--text);
             background:
-                radial-gradient(circle at top left, rgba(143, 59, 46, 0.18), transparent 30%),
-                linear-gradient(180deg, #f8f2e8 0%, var(--bg) 100%);
+                radial-gradient(circle at top right, rgba(15, 108, 120, 0.18), transparent 30%),
+                linear-gradient(180deg, #f8fcfd 0%, var(--bg) 100%);
         }
 
         main {
@@ -52,13 +52,7 @@
             line-height: 1.5;
         }
 
-        .hero {
-            display: grid;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .hero-card,
+        .hero,
         .panel,
         .task-card {
             background: var(--panel);
@@ -67,11 +61,18 @@
             box-shadow: var(--shadow);
         }
 
-        .hero-card {
+        .hero {
             padding: 24px;
+            margin-bottom: 24px;
         }
 
-        .hero-eyebrow {
+        .hero h1 {
+            margin: 8px 0 12px;
+            font-size: clamp(2rem, 4vw, 3.1rem);
+            line-height: 0.96;
+        }
+
+        .eyebrow {
             margin: 0;
             color: var(--accent);
             font-size: 0.85rem;
@@ -79,10 +80,15 @@
             letter-spacing: 0.12em;
         }
 
-        .hero-card h1 {
-            margin: 8px 0 12px;
-            font-size: clamp(2rem, 4vw, 3.2rem);
-            line-height: 0.96;
+        .repo-link {
+            color: var(--accent);
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+        }
+
+        .repo-link:hover {
+            border-bottom-color: var(--accent);
         }
 
         .grid {
@@ -143,32 +149,48 @@
             padding: 10px 16px;
             cursor: pointer;
             background: var(--accent);
-            color: #fff9f4;
-            transition: transform 120ms ease, background 120ms ease;
-        }
-
-        button:hover {
-            transform: translateY(-1px);
-            background: var(--accent-strong);
+            color: #f7fdff;
         }
 
         button.secondary {
-            background: #e9decd;
+            background: #dcebf0;
             color: var(--text);
-        }
-
-        button.secondary:hover {
-            background: #ddd0bb;
         }
 
         button.danger {
             background: var(--error);
+            color: #fff;
         }
 
-        .button-row {
+        .button-row,
+        .task-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+        }
+
+        .toolbar,
+        .task-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            background: var(--panel-alt);
+            color: var(--muted);
+        }
+
+        .task-header .pill[data-role="id"] {
+            min-width: 0;
+            overflow-wrap: anywhere;
         }
 
         .status-line {
@@ -185,44 +207,42 @@
             color: var(--ok);
         }
 
-        .toolbar {
+        .carousel-viewport {
+            overflow: hidden;
+            border-radius: 16px;
+        }
+
+        .carousel-track {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
+            align-items: stretch;
+            transition: transform 0.35s ease;
+        }
+
+        .carousel-track > .task-card,
+        .carousel-track > .empty-state {
+            flex: 0 0 100%;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .carousel-controls {
+            display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
+            gap: 12px;
+            margin-top: 16px;
         }
 
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            background: var(--panel-alt);
-            color: var(--muted);
-        }
-
-        .tasks {
-            display: grid;
-            gap: 16px;
+        .carousel-controls button:disabled {
+            opacity: 0.45;
+            cursor: default;
         }
 
         .task-card {
             padding: 18px;
             background:
-                linear-gradient(135deg, rgba(143, 59, 46, 0.06), transparent 32%),
+                linear-gradient(135deg, rgba(15, 108, 120, 0.06), transparent 32%),
                 var(--panel);
-        }
-
-        .task-header {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 10px;
         }
 
         .task-title {
@@ -238,20 +258,13 @@
             color: var(--muted);
         }
 
-        .task-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 16px;
-        }
-
         .empty-state {
             padding: 32px 20px;
             border: 1px dashed var(--border);
             border-radius: 18px;
             text-align: center;
             color: var(--muted);
-            background: rgba(255, 253, 248, 0.6);
+            background: rgba(255, 255, 255, 0.7);
         }
 
         pre {
@@ -259,22 +272,240 @@
             padding: 16px;
             overflow: auto;
             border-radius: 14px;
-            background: #211b18;
-            color: #f6e9d1;
+            background: #162028;
+            color: #ebf8fc;
             font-family: "SFMono-Regular", Consolas, monospace;
             font-size: 0.85rem;
             line-height: 1.45;
+        }
+
+        .log-panel {
+            margin-top: 24px;
+        }
+
+        .log-header {
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--panel-alt);
+            color: var(--text);
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+
+        .log-grid {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 620px) {
+            .log-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .log-stream {
+            height: 100%;
+            min-height: 120px;
+            max-height: 360px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 14px;
+            background: #162028;
+            color: #ebf8fc;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.8rem;
+            line-height: 1.45;
+        }
+
+        .log-empty {
+            color: #7f95a1;
+        }
+
+        .log-entry {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(235, 248, 252, 0.12);
+        }
+
+        .log-entry:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .log-entry-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .log-entry-url {
+            color: #cfe6ee;
+            overflow-wrap: anywhere;
+        }
+
+        .log-entry-body {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+            overflow: visible;
+            color: #ebf8fc;
+            font-family: inherit;
+            font-size: inherit;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .log-col-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .log-col-head button {
+            padding: 4px 12px;
+            font-size: 0.8rem;
+        }
+
+        .log-col-title {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .method-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #f7fdff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .method-badge[data-method="GET"] {
+            background: #1f7a45;
+        }
+
+        .method-badge[data-method="POST"] {
+            background: #0f6c78;
+        }
+
+        .method-badge[data-method="PUT"] {
+            background: #8a6d1f;
+        }
+
+        .method-badge[data-method="DELETE"] {
+            background: #9c2e1b;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: #1f7a45;
+            color: #f7fdff;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .status-badge[data-ok="false"] {
+            background: #9c2e1b;
+        }
+
+        .log-time {
+            color: #9db4bf;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .mobile-app {
+            margin-top: 24px;
+        }
+
+        .mobile-app h3 {
+            margin: 20px 0 8px;
+            font-size: 1.05rem;
+        }
+
+        .mobile-app p {
+            margin: 0 0 12px;
+        }
+
+        .mobile-app ul {
+            margin: 0 0 12px;
+            padding-left: 20px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .mobile-app code {
+            background: var(--panel-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1px 6px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.85em;
+            color: var(--accent-strong);
+        }
+
+        .shots {
+            display: grid;
+            gap: 16px;
+            margin: 16px 0 20px;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 700px) {
+            .shots {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .shots figure {
+            margin: 0;
+        }
+
+        .shots img {
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            display: block;
+        }
+
+        .shots figcaption {
+            margin-top: 8px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--accent);
         }
     </style>
 </head>
 <body>
     <main>
         <section class="hero">
-            <div class="hero-card">
-                <p class="hero-eyebrow">Local API client</p>
-                <h1>Task Tester</h1>
-                <p>Use this page to exercise the local task API without Postman or Swagger. Point it at any base URL, create records, edit them inline, and inspect failures directly.</p>
-            </div>
+            <p class="eyebrow">Local endpoint</p>
+            <h1>Local Task Tester</h1>
+            <p>This page targets the local task API at <code>http://127.0.0.1:5024</code> by default. Use it to validate the API against your local emulator without changing tools.</p>
+            <p><a class="repo-link" href="https://github.com/arnybarnes/RN_NET_TEST" target="_blank" rel="noopener">View the project on GitHub &rarr;</a></p>
         </section>
 
         <section class="grid">
@@ -320,14 +551,84 @@
                         </div>
                         <button id="refreshTasksButton" type="button" class="secondary">Refresh</button>
                     </div>
-                    <div id="tasksContainer" class="tasks"></div>
-                </section>
-
-                <section class="panel">
-                    <h2>Request / Response Log</h2>
-                    <pre id="requestLog">No requests yet.</pre>
+                    <div class="carousel">
+                        <div id="tasksViewport" class="carousel-viewport">
+                            <div id="tasksContainer" class="carousel-track"></div>
+                        </div>
+                        <div class="carousel-controls">
+                            <button id="prevTaskButton" type="button" class="secondary">&larr; Previous</button>
+                            <span id="carouselIndicator" class="pill">0 / 0</span>
+                            <button id="nextTaskButton" type="button" class="secondary">Next &rarr;</button>
+                        </div>
+                    </div>
                 </section>
             </div>
+        </section>
+
+        <section class="panel log-panel">
+            <h2>Request / Response Log</h2>
+            <div id="logHeader" class="log-header">No requests yet.</div>
+            <div class="log-grid">
+                <div class="log-col">
+                    <div class="log-col-head">
+                        <span class="log-col-title">Requests</span>
+                        <button id="clearLogButton" type="button" class="secondary">Clear</button>
+                    </div>
+                    <div id="requestLog" class="log-stream">
+                        <span class="log-empty">No requests yet.</span>
+                    </div>
+                </div>
+                <div class="log-col">
+                    <div class="log-col-head">
+                        <span class="log-col-title">Responses</span>
+                    </div>
+                    <div id="responseLog" class="log-stream">
+                        <span class="log-empty">No responses yet.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel mobile-app">
+            <h2>React Native App</h2>
+            <p>The mobile client is an Expo / React Native app called <strong>RN Task Console</strong>. It talks directly to the deployed Azure Functions endpoint and exercises the full CRUD surface of the <code>Tasks</code> API from a phone. The UI is organized into three tabs &mdash; <strong>Connect</strong>, <strong>Create</strong>, and <strong>List</strong> &mdash; selected from a bottom tab bar.</p>
+
+            <div class="shots">
+                <figure>
+                    <img src="./01-connect.png" alt="Connect tab showing the API base URL, Health check and Count tasks buttons, and a Health: Healthy result" loading="lazy">
+                    <figcaption>Connect</figcaption>
+                </figure>
+                <figure>
+                    <img src="./02-create.png" alt="Create tab showing the task title and description fields with a Create task button" loading="lazy">
+                    <figcaption>Create</figcaption>
+                </figure>
+                <figure>
+                    <img src="./03-list.png" alt="List tab showing task cards with editable fields, status selector, and Save/Delete actions" loading="lazy">
+                    <figcaption>List</figcaption>
+                </figure>
+            </div>
+
+            <p><strong>Connect</strong> holds the API base URL (defaulting to the hosted Azure endpoint), a <code>Health check</code> button that pings <code>/health</code>, and a <code>Count tasks</code> button that reports how many tasks are stored. The result of the last action is shown below the buttons (for example, <code>Health: Healthy</code>).</p>
+            <p><strong>Create</strong> is a focused form with <code>Task title</code> and <code>Task description</code> fields and a <code>Create task</code> button. Submitting posts to the API and automatically switches to the List tab so you can see the new task.</p>
+            <p><strong>List</strong> shows every task as a card with its title, ID, editable title/description fields, a status selector (<code>Pending</code> / <code>InProgress</code> / <code>Completed</code>), <code>Save</code> and <code>Delete</code> actions, and created/updated timestamps. A <code>Refresh tasks</code> button and a live task count sit at the top.</p>
+
+            <h3>What it does</h3>
+            <ul>
+                <li>points at the hosted Azure API by default</li>
+                <li>lets you override the base URL at runtime</li>
+                <li>runs a health check against the API</li>
+                <li>reports how many tasks are stored</li>
+                <li>creates tasks</li>
+                <li>lists tasks</li>
+                <li>updates task title, description, and status inline</li>
+                <li>deletes tasks</li>
+            </ul>
+
+            <h3>Run it</h3>
+            <pre>cd mobile
+npm install
+npm start</pre>
+            <p>Then use Expo to open the app on an iOS simulator, an Android emulator, or Expo Go on a device.</p>
         </section>
     </main>
 

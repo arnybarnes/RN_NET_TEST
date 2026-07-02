@@ -28,6 +28,18 @@ echo
 echo "Expected URL: http://127.0.0.1:5024"
 echo
 
+TESTER="$SCRIPT_DIR/html-testers/local/index.html"
+if [ -f "$TESTER" ]; then
+    read -r "?Launch local tester? [y/N] " LAUNCH_TESTER
+    case "$LAUNCH_TESTER" in
+        [Yy]*)
+            echo "Opening local tester..."
+            open "$TESTER"
+            ;;
+    esac
+    echo
+fi
+
 dotnet run --launch-profile http
 EXIT_CODE=$?
 

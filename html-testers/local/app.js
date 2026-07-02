@@ -1,6 +1,8 @@
 const state = {
     tasks: [],
-    isLoading: false
+    isLoading: false,
+    currentIndex: 0,
+    requestStartedAt: null
 };
 
 const elements = {
@@ -8,7 +10,14 @@ const elements = {
     globalStatus: document.querySelector("#globalStatus"),
     taskCount: document.querySelector("#taskCount"),
     tasksContainer: document.querySelector("#tasksContainer"),
+    tasksTrack: document.querySelector("#tasksContainer"),
+    carouselIndicator: document.querySelector("#carouselIndicator"),
+    prevTaskButton: document.querySelector("#prevTaskButton"),
+    nextTaskButton: document.querySelector("#nextTaskButton"),
+    logHeader: document.querySelector("#logHeader"),
     requestLog: document.querySelector("#requestLog"),
+    responseLog: document.querySelector("#responseLog"),
+    clearLogButton: document.querySelector("#clearLogButton"),
     createTaskForm: document.querySelector("#createTaskForm"),
     loadTasksButton: document.querySelector("#loadTasksButton"),
     refreshTasksButton: document.querySelector("#refreshTasksButton"),
@@ -25,9 +34,118 @@ function setStatus(message, tone = "") {
     elements.globalStatus.className = tone ? `status-line ${tone}` : "status-line";
 }
 
-function setLog(title, payload) {
-    const body = typeof payload === "string" ? payload : JSON.stringify(payload, null, 2);
-    elements.requestLog.textContent = `${title}\n\n${body}`;
+function formatLogTime(date) {
+    const meridiem = date.getHours() >= 12 ? "PM" : "AM";
+    const hours = date.getHours() % 12 || 12;
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    const millis = String(date.getMilliseconds()).padStart(3, "0");
+    return `${hours}:${minutes}:${seconds}.${millis} ${meridiem}`;
+}
+
+function formatPayload(payload) {
+    if (payload === undefined || payload === null || payload === "") {
+        return "(empty)";
+    }
+
+    if (typeof payload === "string") {
+        try {
+            return JSON.stringify(JSON.parse(payload), null, 2);
+        } catch {
+            return payload;
+        }
+    }
+
+    return JSON.stringify(payload, null, 2);
+}
+
+const MAX_LOG_ENTRIES = 50;
+
+function appendLogEntry(stream, entry) {
+    const placeholder = stream.querySelector(".log-empty");
+    if (placeholder) {
+        placeholder.remove();
+    }
+
+    stream.prepend(entry);
+
+    while (stream.children.length > MAX_LOG_ENTRIES) {
+        stream.lastElementChild.remove();
+    }
+}
+
+function makeBadge(className, text, dataAttr, dataValue) {
+    const badge = document.createElement("span");
+    badge.className = className;
+    badge.textContent = text;
+    if (dataAttr) {
+        badge.dataset[dataAttr] = dataValue;
+    }
+    return badge;
+}
+
+function logRequest(method, url, config, time) {
+    state.requestStartedAt = time;
+    elements.logHeader.textContent = `${method} ${url}`;
+
+    const entry = document.createElement("div");
+    entry.className = "log-entry";
+
+    const head = document.createElement("div");
+    head.className = "log-entry-head";
+    head.append(
+        makeBadge("method-badge", method, "method", method),
+        makeBadge("log-time", formatLogTime(time))
+    );
+
+    const urlLine = document.createElement("div");
+    urlLine.className = "log-entry-url";
+    urlLine.textContent = url;
+
+    const body = document.createElement("pre");
+    body.className = "log-entry-body";
+    body.textContent = [
+        "Headers:",
+        formatPayload(config.headers ?? {}),
+        "",
+        "Body:",
+        formatPayload(config.body)
+    ].join("\n");
+
+    entry.append(head, urlLine, body);
+    appendLogEntry(elements.requestLog, entry);
+}
+
+function logResponse(method, url, status, statusText, payload, time) {
+    const elapsed =
+        state.requestStartedAt instanceof Date
+            ? `${formatLogTime(time)} · ${time.getTime() - state.requestStartedAt.getTime()} ms`
+            : formatLogTime(time);
+
+    elements.logHeader.textContent = `${method} ${url} -> ${status} ${statusText}`;
+
+    const entry = document.createElement("div");
+    entry.className = "log-entry";
+
+    const head = document.createElement("div");
+    head.className = "log-entry-head";
+    head.append(
+        makeBadge("status-badge", `${status} ${statusText}`.trim(), "ok", String(status >= 200 && status < 400)),
+        makeBadge("log-time", elapsed)
+    );
+
+    const body = document.createElement("pre");
+    body.className = "log-entry-body";
+    body.textContent = formatPayload(payload);
+
+    entry.append(head, body);
+    appendLogEntry(elements.responseLog, entry);
+}
+
+function clearLogs() {
+    elements.logHeader.textContent = "No requests yet.";
+    elements.requestLog.innerHTML = '<span class="log-empty">No requests yet.</span>';
+    elements.responseLog.innerHTML = '<span class="log-empty">No responses yet.</span>';
 }
 
 function formatTimestamp(value) {
@@ -60,12 +178,21 @@ async function request(path, options = {}) {
         body: options.body ? JSON.stringify(options.body) : undefined
     };
 
+    logRequest(config.method, url, config, new Date());
+
     const response = await fetch(url, config);
     const contentType = response.headers.get("content-type") ?? "";
     const isJson = contentType.includes("application/json");
     const data = isJson ? await response.json() : await response.text();
 
-    setLog(`${config.method} ${url} -> ${response.status} ${response.statusText}`, data || "(empty response)");
+    logResponse(
+        config.method,
+        url,
+        response.status,
+        response.statusText,
+        data === "" ? "(empty response)" : data,
+        new Date()
+    );
 
     if (!response.ok) {
         const detail = extractErrorMessage(data) || `${response.status} ${response.statusText}`;
@@ -111,12 +238,14 @@ function extractErrorMessage(data) {
 function renderTasks() {
     elements.tasksContainer.innerHTML = "";
     elements.taskCount.textContent = `${state.tasks.length} task${state.tasks.length === 1 ? "" : "s"}`;
+    state.currentIndex = clampIndex(state.currentIndex);
 
     if (state.tasks.length === 0) {
         const empty = document.createElement("div");
         empty.className = "empty-state";
         empty.textContent = state.isLoading ? "Loading tasks..." : "No tasks returned by the API.";
         elements.tasksContainer.append(empty);
+        updateCarousel();
         return;
     }
 
@@ -170,6 +299,36 @@ function renderTasks() {
         card.dataset.taskId = task.id;
         elements.tasksContainer.append(fragment);
     }
+
+    updateCarousel();
+}
+
+function clampIndex(index) {
+    if (state.tasks.length === 0) {
+        return 0;
+    }
+
+    return Math.min(Math.max(index, 0), state.tasks.length - 1);
+}
+
+function updateCarousel() {
+    const total = state.tasks.length;
+    const position = total === 0 ? 0 : state.currentIndex + 1;
+
+    elements.tasksTrack.style.transform = `translateX(-${state.currentIndex * 100}%)`;
+    elements.carouselIndicator.textContent = `${position} / ${total}`;
+    elements.prevTaskButton.disabled = total === 0 || state.currentIndex === 0;
+    elements.nextTaskButton.disabled = total === 0 || state.currentIndex >= total - 1;
+}
+
+function goToTask(index) {
+    const next = clampIndex(index);
+    if (next === state.currentIndex) {
+        return;
+    }
+
+    state.currentIndex = next;
+    updateCarousel();
 }
 
 async function loadTasks(successMessage = "Tasks loaded.") {
@@ -226,17 +385,38 @@ elements.refreshTasksButton.addEventListener("click", () => {
     loadTasks("Tasks refreshed.");
 });
 
+elements.clearLogButton.addEventListener("click", () => {
+    clearLogs();
+});
+
+elements.prevTaskButton.addEventListener("click", () => {
+    goToTask(state.currentIndex - 1);
+});
+
+elements.nextTaskButton.addEventListener("click", () => {
+    goToTask(state.currentIndex + 1);
+});
+
 elements.healthCheckButton.addEventListener("click", async () => {
     setStatus("Checking health...");
 
+    const url = `${normalizeBaseUrl()}/health`;
+    const config = { method: "GET", headers: { Accept: "text/plain" } };
+
     try {
-        const response = await fetch(`${normalizeBaseUrl()}/health`, {
-            method: "GET",
-            headers: { Accept: "text/plain" }
-        });
+        logRequest(config.method, url, config, new Date());
+
+        const response = await fetch(url, config);
         const text = await response.text();
 
-        setLog(`GET ${normalizeBaseUrl()}/health -> ${response.status} ${response.statusText}`, text || "(empty response)");
+        logResponse(
+            config.method,
+            url,
+            response.status,
+            response.statusText,
+            text === "" ? "(empty response)" : text,
+            new Date()
+        );
 
         if (!response.ok) {
             throw new Error(text || `${response.status} ${response.statusText}`);

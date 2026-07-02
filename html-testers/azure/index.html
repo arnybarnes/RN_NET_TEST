@@ -188,6 +188,11 @@
             color: var(--muted);
         }
 
+        .task-header .pill[data-role="id"] {
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
         .status-line {
             margin-top: 14px;
             min-height: 1.5em;
@@ -217,6 +222,7 @@
         .carousel-track > .empty-state {
             flex: 0 0 100%;
             width: 100%;
+            min-width: 0;
         }
 
         .carousel-controls {
