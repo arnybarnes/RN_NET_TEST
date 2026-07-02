@@ -84,6 +84,10 @@ function extractErrorMessage(
   return `${status} ${statusText}`;
 }
 
+export async function checkHealth(baseUrl?: string) {
+  return request<{ status?: string }>('/health', {}, baseUrl);
+}
+
 export async function getTasks(baseUrl?: string) {
   return request<TaskItem[]>('/api/tasks', {}, baseUrl);
 }
