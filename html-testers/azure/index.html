@@ -247,6 +247,69 @@
             font-size: 0.85rem;
             line-height: 1.45;
         }
+
+        .mobile-app {
+            margin-top: 24px;
+        }
+
+        .mobile-app h3 {
+            margin: 20px 0 8px;
+            font-size: 1.05rem;
+        }
+
+        .mobile-app p {
+            margin: 0 0 12px;
+        }
+
+        .mobile-app ul {
+            margin: 0 0 12px;
+            padding-left: 20px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .mobile-app code {
+            background: var(--panel-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1px 6px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+            font-size: 0.85em;
+            color: var(--accent-strong);
+        }
+
+        .shots {
+            display: grid;
+            gap: 16px;
+            margin: 16px 0 20px;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 700px) {
+            .shots {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .shots figure {
+            margin: 0;
+        }
+
+        .shots img {
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            display: block;
+        }
+
+        .shots figcaption {
+            margin-top: 8px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--accent);
+        }
     </style>
 </head>
 <body>
@@ -309,6 +372,48 @@
                     <pre id="requestLog">No requests yet.</pre>
                 </section>
             </div>
+        </section>
+
+        <section class="panel mobile-app">
+            <h2>React Native App</h2>
+            <p>The mobile client is an Expo / React Native app called <strong>RN Task Console</strong>. It talks directly to the deployed Azure Functions endpoint and exercises the full CRUD surface of the <code>Tasks</code> API from a phone. The UI is organized into three tabs &mdash; <strong>Connect</strong>, <strong>Create</strong>, and <strong>List</strong> &mdash; selected from a bottom tab bar.</p>
+
+            <div class="shots">
+                <figure>
+                    <img src="./01-connect.png" alt="Connect tab showing the API base URL, Health check and Count tasks buttons, and a Health: Healthy result" loading="lazy">
+                    <figcaption>Connect</figcaption>
+                </figure>
+                <figure>
+                    <img src="./02-create.png" alt="Create tab showing the task title and description fields with a Create task button" loading="lazy">
+                    <figcaption>Create</figcaption>
+                </figure>
+                <figure>
+                    <img src="./03-list.png" alt="List tab showing task cards with editable fields, status selector, and Save/Delete actions" loading="lazy">
+                    <figcaption>List</figcaption>
+                </figure>
+            </div>
+
+            <p><strong>Connect</strong> holds the API base URL (defaulting to the hosted Azure endpoint), a <code>Health check</code> button that pings <code>/health</code>, and a <code>Count tasks</code> button that reports how many tasks are stored. The result of the last action is shown below the buttons (for example, <code>Health: Healthy</code>).</p>
+            <p><strong>Create</strong> is a focused form with <code>Task title</code> and <code>Task description</code> fields and a <code>Create task</code> button. Submitting posts to the API and automatically switches to the List tab so you can see the new task.</p>
+            <p><strong>List</strong> shows every task as a card with its title, ID, editable title/description fields, a status selector (<code>Pending</code> / <code>InProgress</code> / <code>Completed</code>), <code>Save</code> and <code>Delete</code> actions, and created/updated timestamps. A <code>Refresh tasks</code> button and a live task count sit at the top.</p>
+
+            <h3>What it does</h3>
+            <ul>
+                <li>points at the hosted Azure API by default</li>
+                <li>lets you override the base URL at runtime</li>
+                <li>runs a health check against the API</li>
+                <li>reports how many tasks are stored</li>
+                <li>creates tasks</li>
+                <li>lists tasks</li>
+                <li>updates task title, description, and status inline</li>
+                <li>deletes tasks</li>
+            </ul>
+
+            <h3>Run it</h3>
+            <pre>cd mobile
+npm install
+npm start</pre>
+            <p>Then use Expo to open the app on an iOS simulator, an Android emulator, or Expo Go on a device.</p>
         </section>
     </main>
 
