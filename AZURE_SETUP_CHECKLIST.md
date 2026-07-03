@@ -2,7 +2,7 @@
 
 This checklist captures the local tooling and Azure account state required before building the Azure Functions host and deploying this project.
 
-Status in this repo as of June 23, 2026:
+Status to verify on the deployment machine:
 
 - Azure CLI is installed
 - Azure Functions Core Tools is installed
@@ -23,7 +23,7 @@ Run these commands from the repo root.
 az version
 ```
 
-Expected result for the current machine:
+Expected result shape:
 
 ```json
 {
@@ -40,18 +40,18 @@ Expected result for the current machine:
 az account show
 ```
 
-Expected fields for the current machine:
+Expected fields:
 
 ```json
 {
   "environmentName": "AzureCloud",
-  "id": "c30c423c-db11-4a20-8ac4-e3c202531276",
+  "id": "<subscription-id>",
   "isDefault": true,
-  "name": "biffnaArnoldGmailPAYG",
+  "name": "<subscription-name>",
   "state": "Enabled",
-  "tenantDisplayName": "Default Directory",
+  "tenantDisplayName": "<tenant-display-name>",
   "user": {
-    "name": "biffnaarnold@gmail.com",
+    "name": "<signed-in-user>",
     "type": "user"
   }
 }
@@ -69,13 +69,13 @@ az login
 az group list
 ```
 
-Expected relevant result for the current machine:
+Expected relevant result shape:
 
 ```json
 [
   {
-    "name": "biffna",
-    "location": "eastus",
+    "name": "<resource-group-name>",
+    "location": "<azure-region>",
     "properties": {
       "provisioningState": "Succeeded"
     }
@@ -89,7 +89,7 @@ Expected relevant result for the current machine:
 func --version
 ```
 
-Expected result for the current machine:
+Expected result shape:
 
 ```text
 4.12.0
@@ -101,7 +101,7 @@ Expected result for the current machine:
 dotnet --info
 ```
 
-Expected important fields for the current machine:
+Expected important fields:
 
 ```text
 .NET SDK:
@@ -114,8 +114,8 @@ Host:
 
 ## What Must Be True Before Deployment Work
 
-- `az account show` returns the `biffnaArnoldGmailPAYG` subscription as default
-- `az group list` includes the `biffna` resource group in `eastus`
+- `az account show` returns the intended subscription as default
+- `az group list` includes the intended resource group in the intended Azure region
 - `func --version` returns a valid 4.x version
 - `dotnet --info` shows the .NET 10 SDK installed
 

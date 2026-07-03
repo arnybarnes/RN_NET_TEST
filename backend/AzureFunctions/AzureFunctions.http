@@ -1,0 +1,34 @@
+@AzureFunctions_HostAddress = https://biffnaappserver-bcbagah5g8g9apb3.centralus-01.azurewebsites.net
+
+GET {{AzureFunctions_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{AzureFunctions_HostAddress}}/api/tasks
+Accept: application/json
+
+###
+
+POST {{AzureFunctions_HostAddress}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Azure task",
+  "description": "Verify the deployed Azure Functions host"
+}
+
+###
+
+POST {{AzureFunctions_HostAddress}}/api/tasks/{{taskId}}
+Content-Type: application/json
+
+{
+  "title": "Updated Azure task",
+  "description": "Verify the deployed Azure Functions host update route",
+  "status": "InProgress"
+}
+
+###
+
+POST {{AzureFunctions_HostAddress}}/api/tasks/{{taskId}}/delete

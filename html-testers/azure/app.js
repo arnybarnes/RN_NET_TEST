@@ -172,7 +172,6 @@ async function request(path, options = {}) {
         method: options.method ?? "GET",
         headers: {
             Accept: "application/json",
-            ...(options.body ? { "Content-Type": "application/json" } : {}),
             ...(options.headers ?? {})
         },
         body: options.body ? JSON.stringify(options.body) : undefined
@@ -277,7 +276,7 @@ function renderTasks() {
 
             await runMutation(`Updating ${task.id}`, async () => {
                 await request(`/api/tasks/${task.id}`, {
-                    method: "PUT",
+                    method: "POST",
                     body: payload
                 });
                 await loadTasks("Task updated.");
@@ -291,7 +290,7 @@ function renderTasks() {
             }
 
             await runMutation(`Deleting ${task.id}`, async () => {
-                await request(`/api/tasks/${task.id}`, { method: "DELETE" });
+                await request(`/api/tasks/${task.id}/delete`, { method: "POST" });
                 await loadTasks("Task deleted.");
             });
         });

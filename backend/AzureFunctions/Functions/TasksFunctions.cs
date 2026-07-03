@@ -34,6 +34,13 @@ public sealed class TasksFunctions(ITaskService taskService)
             cancellationToken);
     }
 
+    [Function(nameof(OptionsHealth))]
+    public static HttpResponseData OptionsHealth(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "options", Route = "health")] HttpRequestData request)
+    {
+        return CreateCorsPreflightResponse(request);
+    }
+
     [Function(nameof(GetTasks))]
     public Task<HttpResponseData> GetTasks(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "api/tasks")] HttpRequestData request,
@@ -43,6 +50,13 @@ public sealed class TasksFunctions(ITaskService taskService)
             request,
             cancellationToken,
             () => taskService.GetTasksAsync(cancellationToken));
+    }
+
+    [Function(nameof(OptionsTasks))]
+    public static HttpResponseData OptionsTasks(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "options", Route = "api/tasks")] HttpRequestData request)
+    {
+        return CreateCorsPreflightResponse(request);
     }
 
     [Function(nameof(GetTask))]
@@ -64,6 +78,14 @@ public sealed class TasksFunctions(ITaskService taskService)
         return task is null
             ? await CreateErrorResponseAsync(request, HttpStatusCode.NotFound, "Task not found.", cancellationToken)
             : await CreateJsonResponseAsync(request, HttpStatusCode.OK, task, cancellationToken);
+    }
+
+    [Function(nameof(OptionsTask))]
+    public static HttpResponseData OptionsTask(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "options", Route = "api/tasks/{id:guid}")] HttpRequestData request,
+        string id)
+    {
+        return CreateCorsPreflightResponse(request);
     }
 
     [Function(nameof(CreateTask))]
@@ -95,7 +117,7 @@ public sealed class TasksFunctions(ITaskService taskService)
 
     [Function(nameof(UpdateTask))]
     public async Task<HttpResponseData> UpdateTask(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "api/tasks/{id:guid}")] HttpRequestData request,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "put", "post", Route = "api/tasks/{id:guid}")] HttpRequestData request,
         string id,
         CancellationToken cancellationToken)
     {
@@ -130,6 +152,15 @@ public sealed class TasksFunctions(ITaskService taskService)
             : await CreateJsonResponseAsync(request, HttpStatusCode.OK, task, cancellationToken);
     }
 
+    [Function(nameof(PostDeleteTask))]
+    public Task<HttpResponseData> PostDeleteTask(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/tasks/{id:guid}/delete")] HttpRequestData request,
+        string id,
+        CancellationToken cancellationToken)
+    {
+        return DeleteTask(request, id, cancellationToken);
+    }
+
     [Function(nameof(DeleteTask))]
     public async Task<HttpResponseData> DeleteTask(
         [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "api/tasks/{id:guid}")] HttpRequestData request,
@@ -151,7 +182,9 @@ public sealed class TasksFunctions(ITaskService taskService)
             return await CreateErrorResponseAsync(request, HttpStatusCode.NotFound, "Task not found.", cancellationToken);
         }
 
-        return request.CreateResponse(HttpStatusCode.NoContent);
+        var response = request.CreateResponse(HttpStatusCode.NoContent);
+        AddCorsHeaders(response);
+        return response;
     }
 
     private static async Task<HttpResponseData> HandleAsync<T>(
@@ -236,7 +269,23 @@ public sealed class TasksFunctions(ITaskService taskService)
     {
         var response = request.CreateResponse(statusCode);
         response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+        AddCorsHeaders(response);
         await JsonSerializer.SerializeAsync(response.Body, payload, JsonOptions, cancellationToken);
         return response;
+    }
+
+    private static HttpResponseData CreateCorsPreflightResponse(HttpRequestData request)
+    {
+        var response = request.CreateResponse(HttpStatusCode.NoContent);
+        AddCorsHeaders(response);
+        response.Headers.Add("Access-Control-Max-Age", "86400");
+        return response;
+    }
+
+    private static void AddCorsHeaders(HttpResponseData response)
+    {
+        response.Headers.Add("Access-Control-Allow-Origin", "*");
+        response.Headers.Add("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+        response.Headers.Add("Access-Control-Allow-Headers", "Content-Type,Accept");
     }
 }

@@ -8,7 +8,7 @@ The repo includes a local .NET task API backed by SQLite, an Azure-hosted Functi
 
 - **GitHub repo:** https://github.com/arnybarnes/RN_NET_TEST
 - **Hosted HTML tester:** https://arnoldbiffna.com/reactNativeASPnetSample/
-- **Azure Functions API:** https://rnnettestfuncc30c423c3.azurewebsites.net
+- **Azure Functions API:** https://biffnaappserver-bcbagah5g8g9apb3.centralus-01.azurewebsites.net
 
 ## What It Does
 
@@ -37,7 +37,7 @@ Working now:
 
 - local task API in `backend/LocalApi`
 - Azure Functions host scaffolded in `backend/AzureFunctions`
-- deployed Azure Functions endpoint at `https://rnnettestfuncc30c423c3.azurewebsites.net`
+- deployed Azure Functions endpoint at `https://biffnaappserver-bcbagah5g8g9apb3.centralus-01.azurewebsites.net`
 - shared backend projects in `backend/Core` and `backend/Infrastructure`
 - local HTML tester in `html-testers/local`
 - hosted HTML tester in `html-testers/azure`
@@ -128,8 +128,14 @@ You can also run it locally by opening this file in your browser:
 Either way, it defaults to the deployed Azure Functions base URL:
 
 ```text
-https://rnnettestfuncc30c423c3.azurewebsites.net
+https://biffnaappserver-bcbagah5g8g9apb3.centralus-01.azurewebsites.net
 ```
+
+To keep the Azure Functions app warm, double-click:
+
+- [keep-azure-api-awake.command](/Users/arnoldbiffna/Documents/dev/RN_NET_TEST/keep-azure-api-awake.command)
+
+That script uses `caffeinate` while it is running and calls the Azure `/health` endpoint every 7 minutes. It prints the elapsed runtime, number of calls made, HTTP status, response time, and health response for each check. Close the Terminal window or press `Ctrl-C` to stop it.
 
 ## Mobile App
 
