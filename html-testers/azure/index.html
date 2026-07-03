@@ -3,213 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Task API Tester</title>
+    <title>Azure Task API Tester - Tabs</title>
     <style>
         :root {
             color-scheme: light;
-            --bg: #eef4f7;
+            --bg: #edf5f8;
             --panel: #ffffff;
-            --panel-alt: #f5fafc;
-            --text: #18222a;
-            --muted: #5d6b75;
-            --border: #c9d9e2;
-            --accent: #0f6c78;
-            --accent-strong: #0a5660;
-            --ok: #1f7a45;
-            --error: #9c2e1b;
-            --shadow: 0 18px 40px rgba(15, 42, 56, 0.08);
+            --panel-soft: #f7fbfd;
+            --input: #f8fdff;
+            --text: #17232c;
+            --muted: #63727d;
+            --border: #cbdde5;
+            --accent: #0f7882;
+            --accent-strong: #0a5f68;
+            --danger: #aa2d1d;
+            --success: #1f7a45;
+            --shadow: 0 18px 42px rgba(20, 50, 64, 0.08);
+            --content: 980px;
         }
 
         * {
             box-sizing: border-box;
         }
 
+        html {
+            min-width: 320px;
+        }
+
         body {
             margin: 0;
-            font-family: Georgia, "Times New Roman", serif;
+            min-height: 100vh;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             color: var(--text);
+            background: var(--bg);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
             background:
-                radial-gradient(circle at top right, rgba(15, 108, 120, 0.18), transparent 30%),
-                linear-gradient(180deg, #f8fcfd 0%, var(--bg) 100%);
+                radial-gradient(circle at 15% 5%, rgba(15, 120, 130, 0.14), transparent 28%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(237, 245, 248, 0));
         }
 
-        main {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 32px 20px 48px;
-        }
-
-        h1,
-        h2,
-        h3 {
-            margin-top: 0;
-            font-weight: 700;
-            letter-spacing: 0.02em;
-        }
-
-        p {
-            color: var(--muted);
-            line-height: 1.5;
-        }
-
-        .hero,
-        .panel,
-        .task-card {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            box-shadow: var(--shadow);
-        }
-
-        .hero {
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .hero h1 {
-            margin: 8px 0 12px;
-            font-size: clamp(2rem, 4vw, 3.1rem);
-            line-height: 0.96;
-        }
-
-        .eyebrow {
-            margin: 0;
-            color: var(--accent);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-        }
-
-        .repo-link {
-            color: var(--accent);
-            font-weight: 700;
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-        }
-
-        .repo-link:hover {
-            border-bottom-color: var(--accent);
-        }
-
-        .grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        @media (min-width: 900px) {
-            .grid {
-                grid-template-columns: 360px minmax(0, 1fr);
-                align-items: start;
-            }
-        }
-
-        .stack {
-            display: grid;
-            gap: 20px;
-        }
-
-        .panel {
-            padding: 20px;
-        }
-
-        label {
-            display: grid;
-            gap: 8px;
-            font-size: 0.95rem;
-            color: var(--muted);
-            margin-bottom: 14px;
-        }
-
+        button,
         input,
         textarea,
-        select,
-        button {
+        select {
             font: inherit;
+        }
+
+        button {
+            min-height: 44px;
+            border: 0;
+            border-radius: 999px;
+            padding: 10px 18px;
+            cursor: pointer;
+            background: var(--accent);
+            color: #f7fdff;
+            font-weight: 800;
+        }
+
+        button:hover {
+            background: var(--accent-strong);
+        }
+
+        button:disabled {
+            cursor: default;
+            opacity: 0.48;
+        }
+
+        button.secondary {
+            background: #ddecef;
+            color: var(--text);
+        }
+
+        button.secondary:hover {
+            background: #cfe3e8;
+        }
+
+        button.danger {
+            background: var(--danger);
+            color: #ffffff;
         }
 
         input,
         textarea,
         select {
             width: 100%;
+            min-height: 48px;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            background: #fff;
+            border-radius: 14px;
+            background: var(--input);
             padding: 12px 14px;
             color: var(--text);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
 
         textarea {
-            min-height: 96px;
+            min-height: 120px;
             resize: vertical;
         }
 
-        button {
-            border: 0;
-            border-radius: 999px;
-            padding: 10px 16px;
-            cursor: pointer;
-            background: var(--accent);
-            color: #f7fdff;
+        label {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 16px;
+            color: var(--muted);
+            font-weight: 700;
         }
 
-        button.secondary {
-            background: #dcebf0;
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            margin-bottom: 12px;
+            font-size: clamp(2.15rem, 6vw, 4rem);
+            line-height: 0.96;
+            letter-spacing: 0;
+        }
+
+        h2 {
+            margin-bottom: 18px;
+            font-size: clamp(1.55rem, 4vw, 2.35rem);
+            letter-spacing: 0;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            letter-spacing: 0;
+        }
+
+        p {
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        a {
+            color: var(--accent-strong);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .shell {
+            position: relative;
+            z-index: 1;
+            width: min(100%, var(--content));
+            margin: 0 auto;
+            padding: 24px 16px 56px;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            margin: 0 0 18px;
+            padding: max(12px, env(safe-area-inset-top)) 16px 12px;
+            background: rgba(237, 245, 248, 0.94);
+            border-bottom: 1px solid rgba(203, 221, 229, 0.85);
+            backdrop-filter: blur(18px);
+        }
+
+        .tabs {
+            width: min(100%, var(--content));
+            margin: 0 auto;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-button {
+            flex: 1 0 auto;
+            min-width: max-content;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #34464f;
+            border-radius: 999px;
+            padding: 10px 16px;
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.7);
             color: var(--text);
         }
 
-        button.danger {
-            background: var(--error);
-            color: #fff;
+        .tab-button[aria-selected="true"] {
+            background: var(--accent);
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(15, 120, 130, 0.22);
+        }
+
+        .hero {
+            margin-bottom: 18px;
+            padding: clamp(20px, 4vw, 32px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: var(--shadow);
+        }
+
+        .eyebrow {
+            margin-bottom: 12px;
+            color: var(--accent);
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .status-line {
+            min-height: 1.5em;
+            margin: 0 0 18px;
+            padding: 0 2px;
+            color: var(--muted);
+            overflow-wrap: anywhere;
+        }
+
+        .status-line.error {
+            color: var(--danger);
+            font-weight: 800;
+        }
+
+        .status-line.success {
+            color: var(--success);
+            font-weight: 800;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .panel {
+            padding: clamp(18px, 4vw, 28px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: var(--shadow);
         }
 
         .button-row,
-        .task-actions {
+        .task-actions,
+        .carousel-controls,
+        .toolbar {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
         }
 
+        .button-row button,
+        .task-actions button {
+            flex: 1 1 150px;
+        }
+
         .toolbar,
-        .task-header {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
+        .carousel-controls {
             justify-content: space-between;
-            align-items: start;
+            align-items: center;
+        }
+
+        .task-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .task-nav button {
+            width: 42px;
+            min-height: 38px;
+            padding: 7px 10px;
+            font-size: 1.05rem;
+            line-height: 1;
+        }
+
+        .toolbar h2 {
+            margin-bottom: 8px;
         }
 
         .pill {
             display: inline-flex;
             align-items: center;
+            min-height: 32px;
             padding: 6px 12px;
             border-radius: 999px;
-            font-size: 0.85rem;
-            background: var(--panel-alt);
+            background: var(--panel-soft);
             color: var(--muted);
+            font-size: 0.88rem;
+            font-weight: 800;
         }
 
         .task-header .pill[data-role="id"] {
-            min-width: 0;
+            max-width: 100%;
             overflow-wrap: anywhere;
         }
 
-        .status-line {
-            margin-top: 14px;
-            min-height: 1.5em;
-            color: var(--muted);
-        }
-
-        .status-line.error {
-            color: var(--error);
-        }
-
-        .status-line.success {
-            color: var(--ok);
+        .carousel {
+            margin-top: 18px;
         }
 
         .carousel-viewport {
             overflow: hidden;
-            border-radius: 16px;
+            border-radius: 18px;
         }
 
         .carousel-track {
@@ -225,107 +337,99 @@
             min-width: 0;
         }
 
-        .carousel-controls {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .carousel-controls button:disabled {
-            opacity: 0.45;
-            cursor: default;
-        }
-
         .task-card {
-            padding: 18px;
-            background:
-                linear-gradient(135deg, rgba(15, 108, 120, 0.06), transparent 32%),
-                var(--panel);
+            padding: clamp(18px, 4vw, 26px);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: var(--panel-soft);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 14px;
         }
 
         .task-title {
-            margin: 0;
-            font-size: 1.25rem;
+            margin-bottom: 8px;
+            font-size: clamp(1.35rem, 5vw, 2rem);
+            line-height: 1.08;
         }
 
         .task-meta {
             display: grid;
-            gap: 4px;
-            margin: 12px 0 0;
-            font-size: 0.9rem;
+            gap: 6px;
+            margin-top: 14px;
             color: var(--muted);
+            font-size: 0.92rem;
         }
 
         .empty-state {
             padding: 32px 20px;
             border: 1px dashed var(--border);
             border-radius: 18px;
-            text-align: center;
-            color: var(--muted);
             background: rgba(255, 255, 255, 0.7);
-        }
-
-        pre {
-            margin: 0;
-            padding: 16px;
-            overflow: auto;
-            border-radius: 14px;
-            background: #162028;
-            color: #ebf8fc;
-            font-family: "SFMono-Regular", Consolas, monospace;
-            font-size: 0.85rem;
-            line-height: 1.45;
-        }
-
-        .log-panel {
-            margin-top: 24px;
+            color: var(--muted);
+            text-align: center;
         }
 
         .log-header {
-            padding: 10px 12px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
+            padding: 12px 14px;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            background: var(--panel-alt);
+            border-radius: 14px;
+            background: var(--panel-soft);
             color: var(--text);
             font-family: "SFMono-Regular", Consolas, monospace;
-            font-size: 0.85rem;
-            word-break: break-all;
+            font-size: 0.86rem;
+            overflow-wrap: anywhere;
         }
 
         .log-grid {
             display: grid;
-            gap: 12px;
             grid-template-columns: 1fr;
-        }
-
-        @media (min-width: 620px) {
-            .log-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            gap: 14px;
         }
 
         .log-stream {
-            height: 100%;
-            min-height: 120px;
-            max-height: 360px;
+            min-height: 180px;
+            max-height: min(48vh, 420px);
             overflow: auto;
             display: flex;
             flex-direction: column;
             gap: 12px;
             padding: 12px;
-            border-radius: 14px;
-            background: #162028;
-            color: #ebf8fc;
+            border-radius: 16px;
+            background: #17222b;
+            color: #eaf7fb;
             font-family: "SFMono-Regular", Consolas, monospace;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             line-height: 1.45;
         }
 
+        .log-col-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .log-col-title {
+            color: var(--accent-strong);
+            font-weight: 900;
+        }
+
+        .log-col-head button {
+            min-height: 34px;
+            padding: 5px 12px;
+            font-size: 0.82rem;
+        }
+
         .log-empty {
-            color: #7f95a1;
+            color: #94aab3;
         }
 
         .log-entry {
@@ -333,7 +437,7 @@
             flex-direction: column;
             gap: 6px;
             padding-bottom: 12px;
-            border-bottom: 1px solid rgba(235, 248, 252, 0.12);
+            border-bottom: 1px solid rgba(234, 247, 251, 0.12);
         }
 
         .log-entry:last-child {
@@ -349,133 +453,75 @@
         }
 
         .log-entry-url {
-            color: #cfe6ee;
+            color: #cfe5ec;
             overflow-wrap: anywhere;
         }
 
         .log-entry-body {
             margin: 0;
             padding: 0;
-            background: transparent;
-            border-radius: 0;
             overflow: visible;
-            color: #ebf8fc;
+            border-radius: 0;
+            background: transparent;
+            color: inherit;
             font-family: inherit;
             font-size: inherit;
             white-space: pre-wrap;
             overflow-wrap: anywhere;
         }
 
-        .log-col-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 6px;
-        }
-
-        .log-col-head button {
-            padding: 4px 12px;
-            font-size: 0.8rem;
-        }
-
-        .log-col-title {
-            font-weight: 700;
-            color: var(--accent);
-            font-size: 0.9rem;
-        }
-
-        .method-badge {
+        .method-badge,
+        .status-badge {
             display: inline-flex;
             align-items: center;
             padding: 2px 8px;
             border-radius: 999px;
-            background: var(--accent);
-            color: #f7fdff;
+            color: #ffffff;
             font-size: 0.72rem;
-            font-weight: 700;
+            font-weight: 900;
+        }
+
+        .method-badge {
+            background: var(--accent);
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
 
-        .method-badge[data-method="GET"] {
-            background: #1f7a45;
-        }
-
-        .method-badge[data-method="POST"] {
-            background: #0f6c78;
+        .method-badge[data-method="GET"],
+        .status-badge {
+            background: var(--success);
         }
 
         .method-badge[data-method="PUT"] {
             background: #8a6d1f;
         }
 
-        .method-badge[data-method="DELETE"] {
-            background: #9c2e1b;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 2px 8px;
-            border-radius: 999px;
-            background: #1f7a45;
-            color: #f7fdff;
-            font-size: 0.72rem;
-            font-weight: 700;
-        }
-
+        .method-badge[data-method="DELETE"],
         .status-badge[data-ok="false"] {
-            background: #9c2e1b;
+            background: var(--danger);
         }
 
         .log-time {
-            color: #9db4bf;
-            font-size: 0.75rem;
+            color: #9fb5bf;
+            font-size: 0.74rem;
             white-space: nowrap;
         }
 
-        .mobile-app {
-            margin-top: 24px;
+        .about-copy {
+            display: grid;
+            gap: 14px;
         }
 
-        .mobile-app h3 {
-            margin: 20px 0 8px;
-            font-size: 1.05rem;
-        }
-
-        .mobile-app p {
-            margin: 0 0 12px;
-        }
-
-        .mobile-app ul {
-            margin: 0 0 12px;
-            padding-left: 20px;
-            color: var(--muted);
-            line-height: 1.6;
-        }
-
-        .mobile-app code {
-            background: var(--panel-alt);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 1px 6px;
-            font-family: "SFMono-Regular", Consolas, monospace;
-            font-size: 0.85em;
-            color: var(--accent-strong);
+        .about-copy p:last-child {
+            margin-bottom: 0;
         }
 
         .shots {
             display: grid;
-            gap: 16px;
-            margin: 16px 0 20px;
-            grid-template-columns: 1fr;
-        }
-
-        @media (min-width: 700px) {
-            .shots {
-                grid-template-columns: repeat(3, 1fr);
-            }
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin: 18px 0;
+            align-items: start;
         }
 
         .shots figure {
@@ -483,152 +529,297 @@
         }
 
         .shots img {
-            width: 100%;
-            height: auto;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            box-shadow: var(--shadow);
             display: block;
+            width: 100%;
+            max-height: min(42vh, 360px);
+            object-fit: contain;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: #ffffff;
+            box-shadow: 0 10px 24px rgba(20, 50, 64, 0.08);
         }
 
         .shots figcaption {
             margin-top: 8px;
+            color: var(--accent-strong);
+            font-weight: 900;
             text-align: center;
-            font-weight: 700;
-            color: var(--accent);
+        }
+
+        code,
+        pre {
+            font-family: "SFMono-Regular", Consolas, monospace;
+        }
+
+        code {
+            padding: 1px 6px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--panel-soft);
+            color: var(--accent-strong);
+            font-size: 0.9em;
+        }
+
+        pre {
+            margin: 0;
+            padding: 14px;
+            overflow: auto;
+            border-radius: 14px;
+            background: #17222b;
+            color: #eaf7fb;
+            font-size: 0.86rem;
+            line-height: 1.45;
+        }
+
+        .run-card {
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: 18px;
+            background: var(--panel-soft);
+        }
+
+        .run-card h3 {
+            margin-bottom: 10px;
+        }
+
+        @media (min-width: 760px) {
+            .shell {
+                padding-top: 30px;
+                padding-bottom: 72px;
+            }
+
+            .topbar {
+                margin-bottom: 24px;
+            }
+
+            .tab-button {
+                min-width: 0;
+            }
+
+            .hero {
+                display: grid;
+                grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.8fr);
+                gap: 28px;
+                align-items: end;
+            }
+
+            .hero p:last-child {
+                margin-bottom: 0;
+            }
+
+            .log-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .button-row,
+            .toolbar,
+            .carousel-controls {
+                align-items: stretch;
+            }
+
+            .toolbar > button,
+            .carousel-controls button {
+                flex: 1 1 auto;
+            }
+
+            .toolbar {
+                justify-content: space-between;
+            }
+
+            .task-nav {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr auto 1fr;
+            }
+
+            .shots {
+                grid-template-columns: repeat(3, minmax(92px, 1fr));
+                gap: 8px;
+                overflow-x: auto;
+                padding-bottom: 4px;
+            }
+
+            .shots img {
+                max-height: 220px;
+                border-radius: 14px;
+            }
+
+            .shots figcaption {
+                font-size: 0.86rem;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .shell {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .topbar {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .tab-button {
+                padding-inline: 14px;
+            }
+
+            .panel,
+            .hero {
+                border-radius: 20px;
+            }
+
+            .task-header {
+                display: grid;
+            }
+
+            .task-nav {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <main>
-        <section class="hero">
-            <p class="eyebrow">Hosted endpoint</p>
-            <h1>Azure Task Tester</h1>
-            <p>This page targets the deployed Azure Functions endpoint by default. Use it to validate the hosted task API without changing tools or local emulator state.</p>
-            <p><a class="repo-link" href="https://github.com/arnybarnes/RN_NET_TEST" target="_blank" rel="noopener">View the project on GitHub &rarr;</a></p>
+    <nav class="topbar" aria-label="Azure tester sections">
+        <div class="tabs" role="tablist">
+            <button class="tab-button" id="tab-connect" type="button" role="tab" aria-selected="true" aria-controls="panel-connect" data-tab-target="connect">Connect</button>
+            <button class="tab-button" id="tab-create" type="button" role="tab" aria-selected="false" aria-controls="panel-create" data-tab-target="create">Create</button>
+            <button class="tab-button" id="tab-list" type="button" role="tab" aria-selected="false" aria-controls="panel-list" data-tab-target="list">List</button>
+            <button class="tab-button" id="tab-log" type="button" role="tab" aria-selected="false" aria-controls="panel-log" data-tab-target="log">Log</button>
+            <button class="tab-button" id="tab-app" type="button" role="tab" aria-selected="false" aria-controls="panel-app" data-tab-target="app">App</button>
+        </div>
+    </nav>
+
+    <main class="shell">
+        <section class="hero" aria-labelledby="pageTitle">
+            <div>
+                <p class="eyebrow">Hosted Azure endpoint</p>
+                <h1 id="pageTitle">Azure Task Tester</h1>
+                <p>Validate the deployed Azure Functions task API from a responsive web layout with top tabs for connection, creation, listing, logs, and the React Native app notes.</p>
+            </div>
+            <p><a href="https://github.com/arnybarnes/RN_NET_TEST" target="_blank" rel="noopener">View the project on GitHub</a></p>
         </section>
 
-        <section class="grid">
-            <div class="stack">
-                <section class="panel">
-                    <h2>Connection</h2>
-                    <label for="baseUrlInput">
-                        API base URL
-                        <input id="baseUrlInput" name="baseUrl" type="url" value="https://biffnaappserver-bcbagah5g8g9apb3.centralus-01.azurewebsites.net" placeholder="https://biffnaappserver-bcbagah5g8g9apb3.centralus-01.azurewebsites.net">
+        <p id="globalStatus" class="status-line" aria-live="polite"></p>
+
+        <section class="tab-panel active" id="panel-connect" role="tabpanel" aria-labelledby="tab-connect" data-tab-panel="connect">
+            <div class="panel">
+                <h2>Connection</h2>
+                <label for="baseUrlInput">
+                    API base URL
+                    <input id="baseUrlInput" name="baseUrl" type="url" value="https://biffnaappserver-bcbagah5g8g9apb3.centralus-01.azurewebsites.net" placeholder="https://biffnaappserver-bcbagah5g8g9apb3.centralus-01.azurewebsites.net">
+                </label>
+                <div class="button-row">
+                    <button id="loadTasksButton" type="button">Load tasks</button>
+                    <button id="healthCheckButton" type="button" class="secondary">Health check</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="tab-panel" id="panel-create" role="tabpanel" aria-labelledby="tab-create" data-tab-panel="create" hidden>
+            <div class="panel">
+                <h2>Create Task</h2>
+                <form id="createTaskForm">
+                    <label for="createTitleInput">
+                        Title
+                        <input id="createTitleInput" name="title" maxlength="200" required placeholder="Task title">
+                    </label>
+                    <label for="createDescriptionInput">
+                        Description
+                        <textarea id="createDescriptionInput" name="description" maxlength="1000" placeholder="Task description"></textarea>
                     </label>
                     <div class="button-row">
-                        <button id="loadTasksButton" type="button">Load tasks</button>
-                        <button id="healthCheckButton" type="button" class="secondary">Health check</button>
+                        <button type="submit">Create task</button>
+                        <button type="reset" class="secondary">Reset</button>
                     </div>
-                    <p id="globalStatus" class="status-line" aria-live="polite"></p>
-                </section>
-
-                <section class="panel">
-                    <h2>Create Task</h2>
-                    <form id="createTaskForm">
-                        <label for="createTitleInput">
-                            Title
-                            <input id="createTitleInput" name="title" maxlength="200" required>
-                        </label>
-                        <label for="createDescriptionInput">
-                            Description
-                            <textarea id="createDescriptionInput" name="description" maxlength="1000"></textarea>
-                        </label>
-                        <div class="button-row">
-                            <button type="submit">Create task</button>
-                            <button type="reset" class="secondary">Reset</button>
-                        </div>
-                    </form>
-                </section>
-            </div>
-
-            <div class="stack">
-                <section class="panel">
-                    <div class="toolbar">
-                        <div>
-                            <h2>Tasks</h2>
-                            <span id="taskCount" class="pill">0 tasks</span>
-                        </div>
-                        <button id="refreshTasksButton" type="button" class="secondary">Refresh</button>
-                    </div>
-                    <div class="carousel">
-                        <div id="tasksViewport" class="carousel-viewport">
-                            <div id="tasksContainer" class="carousel-track"></div>
-                        </div>
-                        <div class="carousel-controls">
-                            <button id="prevTaskButton" type="button" class="secondary">&larr; Previous</button>
-                            <span id="carouselIndicator" class="pill">0 / 0</span>
-                            <button id="nextTaskButton" type="button" class="secondary">Next &rarr;</button>
-                        </div>
-                    </div>
-                </section>
+                </form>
             </div>
         </section>
 
-        <section class="panel log-panel">
-            <h2>Request / Response Log</h2>
-            <div id="logHeader" class="log-header">No requests yet.</div>
-            <div class="log-grid">
-                <div class="log-col">
-                    <div class="log-col-head">
-                        <span class="log-col-title">Requests</span>
-                        <button id="clearLogButton" type="button" class="secondary">Clear</button>
+        <section class="tab-panel" id="panel-list" role="tabpanel" aria-labelledby="tab-list" data-tab-panel="list" hidden>
+            <div class="panel">
+                <div class="toolbar">
+                    <div>
+                        <h2>Tasks</h2>
+                        <span id="taskCount" class="pill">0 tasks</span>
                     </div>
-                    <div id="requestLog" class="log-stream">
-                        <span class="log-empty">No requests yet.</span>
+                    <div class="task-nav" aria-label="Task navigation">
+                        <button id="prevTaskButton" type="button" class="secondary" aria-label="Previous task">&larr;</button>
+                        <span id="carouselIndicator" class="pill">0 / 0</span>
+                        <button id="nextTaskButton" type="button" class="secondary" aria-label="Next task">&rarr;</button>
                     </div>
+                    <button id="refreshTasksButton" type="button" class="secondary">Refresh tasks</button>
                 </div>
-                <div class="log-col">
-                    <div class="log-col-head">
-                        <span class="log-col-title">Responses</span>
-                    </div>
-                    <div id="responseLog" class="log-stream">
-                        <span class="log-empty">No responses yet.</span>
+                <div class="carousel">
+                    <div id="tasksViewport" class="carousel-viewport">
+                        <div id="tasksContainer" class="carousel-track"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="panel mobile-app">
-            <h2>React Native App</h2>
-            <p>The mobile client is an Expo / React Native app called <strong>RN Task Console</strong>. It talks directly to the deployed Azure Functions endpoint and exercises the full CRUD surface of the <code>Tasks</code> API from a phone. The UI is organized into three tabs &mdash; <strong>Connect</strong>, <strong>Create</strong>, and <strong>List</strong> &mdash; selected from a bottom tab bar.</p>
-
-            <div class="shots">
-                <figure>
-                    <img src="./01-connect.png" alt="Connect tab showing the API base URL, Health check and Count tasks buttons, and a Health: Healthy result" loading="lazy">
-                    <figcaption>Connect</figcaption>
-                </figure>
-                <figure>
-                    <img src="./02-create.png" alt="Create tab showing the task title and description fields with a Create task button" loading="lazy">
-                    <figcaption>Create</figcaption>
-                </figure>
-                <figure>
-                    <img src="./03-list.png" alt="List tab showing task cards with editable fields, status selector, and Save/Delete actions" loading="lazy">
-                    <figcaption>List</figcaption>
-                </figure>
+        <section class="tab-panel" id="panel-log" role="tabpanel" aria-labelledby="tab-log" data-tab-panel="log" hidden>
+            <div class="panel">
+                <h2>Request / Response Log</h2>
+                <div id="logHeader" class="log-header">No requests yet.</div>
+                <div class="log-grid">
+                    <div class="log-col">
+                        <div class="log-col-head">
+                            <span class="log-col-title">Requests</span>
+                            <button id="clearLogButton" type="button" class="secondary">Clear</button>
+                        </div>
+                        <div id="requestLog" class="log-stream">
+                            <span class="log-empty">No requests yet.</span>
+                        </div>
+                    </div>
+                    <div class="log-col">
+                        <div class="log-col-head">
+                            <span class="log-col-title">Responses</span>
+                        </div>
+                        <div id="responseLog" class="log-stream">
+                            <span class="log-empty">No responses yet.</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <p><strong>Connect</strong> holds the API base URL (defaulting to the hosted Azure endpoint), a <code>Health check</code> button that pings <code>/health</code>, and a <code>Count tasks</code> button that reports how many tasks are stored. The result of the last action is shown below the buttons (for example, <code>Health: Healthy</code>).</p>
-            <p><strong>Create</strong> is a focused form with <code>Task title</code> and <code>Task description</code> fields and a <code>Create task</code> button. Submitting posts to the API and automatically switches to the List tab so you can see the new task.</p>
-            <p><strong>List</strong> shows every task as a card with its title, ID, editable title/description fields, a status selector (<code>Pending</code> / <code>InProgress</code> / <code>Completed</code>), <code>Save</code> and <code>Delete</code> actions, and created/updated timestamps. A <code>Refresh tasks</code> button and a live task count sit at the top.</p>
+        <section class="tab-panel" id="panel-app" role="tabpanel" aria-labelledby="tab-app" data-tab-panel="app" hidden>
+            <div class="panel">
+                <h2>React Native App</h2>
+                <div class="about-copy">
+                    <p>The mobile client is an Expo / React Native app called <strong>RN Task Console</strong>. It talks directly to the deployed Azure Functions endpoint and exercises the task API from a phone.</p>
+                    <p>The app uses bottom tabs for <strong>Connect</strong>, <strong>Create</strong>, and <strong>List</strong>. This web version keeps the same task workflow but moves navigation to top tabs for browser use.</p>
+                </div>
 
-            <h3>What it does</h3>
-            <ul>
-                <li>points at the hosted Azure API by default</li>
-                <li>lets you override the base URL at runtime</li>
-                <li>runs a health check against the API</li>
-                <li>reports how many tasks are stored</li>
-                <li>creates tasks</li>
-                <li>lists tasks</li>
-                <li>updates task title, description, and status inline</li>
-                <li>deletes tasks</li>
-            </ul>
+                <div class="shots" aria-label="React Native app screenshots">
+                    <figure>
+                        <img src="./01-connect.png" alt="Connect tab showing the API base URL, Health check and Count tasks buttons, and a Health: Healthy result" loading="lazy">
+                        <figcaption>Connect</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="./02-create.png" alt="Create tab showing task title and description fields with a Create task button" loading="lazy">
+                        <figcaption>Create</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="./03-list.png" alt="List tab showing task cards with editable fields, status selector, and Save/Delete actions" loading="lazy">
+                        <figcaption>List</figcaption>
+                    </figure>
+                </div>
 
-            <h3>Run it</h3>
-            <pre>cd mobile
+                <div class="about-copy">
+                    <p><strong>Connect</strong> holds the API base URL, a health check, and a task count action. <strong>Create</strong> posts new tasks. <strong>List</strong> shows editable task cards with status, save, delete, and timestamp controls.</p>
+                </div>
+
+                <div class="run-card">
+                    <h3>Run it</h3>
+                    <pre>cd mobile
 npm install
 npm start</pre>
-            <p>Then use Expo to open the app on an iOS simulator, an Android emulator, or Expo Go on a device.</p>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -636,10 +827,10 @@ npm start</pre>
         <article class="task-card">
             <div class="task-header">
                 <div>
-                    <h3 class="task-title" data-role="title"></h3>
-                    <span class="pill" data-role="status"></span>
+                    <h3 class="task-title" data-role="title">Task title</h3>
+                    <span class="pill" data-role="status">Status</span>
                 </div>
-                <span class="pill" data-role="id"></span>
+                <span class="pill" data-role="id">Task ID</span>
             </div>
 
             <p data-role="description"></p>
@@ -668,12 +859,56 @@ npm start</pre>
             </form>
 
             <div class="task-meta">
-                <span data-role="created-at"></span>
-                <span data-role="updated-at"></span>
+                <span data-role="created-at">Created</span>
+                <span data-role="updated-at">Updated</span>
             </div>
         </article>
     </template>
 
     <script src="./app.js?v=20260702"></script>
+    <script>
+        const tabButtons = Array.from(document.querySelectorAll("[data-tab-target]"));
+        const tabPanels = Array.from(document.querySelectorAll("[data-tab-panel]"));
+
+        function activateTab(name) {
+            for (const button of tabButtons) {
+                const selected = button.dataset.tabTarget === name;
+                button.setAttribute("aria-selected", String(selected));
+                button.tabIndex = selected ? 0 : -1;
+            }
+
+            for (const panel of tabPanels) {
+                const selected = panel.dataset.tabPanel === name;
+                panel.classList.toggle("active", selected);
+                panel.hidden = !selected;
+            }
+        }
+
+        for (const button of tabButtons) {
+            button.addEventListener("click", () => activateTab(button.dataset.tabTarget));
+            button.addEventListener("keydown", (event) => {
+                if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+                    return;
+                }
+
+                event.preventDefault();
+                const currentIndex = tabButtons.indexOf(button);
+                const direction = event.key === "ArrowRight" ? 1 : -1;
+                const nextIndex = (currentIndex + direction + tabButtons.length) % tabButtons.length;
+                tabButtons[nextIndex].focus();
+                activateTab(tabButtons[nextIndex].dataset.tabTarget);
+            });
+        }
+
+        document.querySelector("#loadTasksButton").addEventListener("click", () => {
+            activateTab("list");
+        });
+
+        document.querySelector("#createTaskForm").addEventListener("submit", (event) => {
+            if (event.currentTarget.checkValidity()) {
+                activateTab("list");
+            }
+        });
+    </script>
 </body>
 </html>
